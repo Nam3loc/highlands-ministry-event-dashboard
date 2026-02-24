@@ -6,14 +6,12 @@ import { events } from "@/db/schema";
 import { eventIdSchema, updateEventSchema } from "@/app/lib/validators/event";
 
 type RouteContext = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
 export async function GET(_req: Request, { params }: RouteContext) {
   try {
-    const parsedId = eventIdSchema.safeParse(params.id);
+    const parsedId = eventIdSchema.safeParse((await params).id);
 
     if (!parsedId.success) {
       return NextResponse.json(
@@ -51,11 +49,14 @@ export async function GET(_req: Request, { params }: RouteContext) {
 
 export async function PUT(req: Request, { params }: RouteContext) {
   try {
-    const parsedId = eventIdSchema.safeParse(params.id);
+    const { id } = await params;
 
+    console.log("PUT id:", id);
+
+    const parsedId = eventIdSchema.safeParse(id);
     if (!parsedId.success) {
       return NextResponse.json(
-        { error: "Invalid event id" },
+        { error: "Invalid event id", details: parsedId.error.flatten() },
         { status: 400 }
       );
     }
@@ -83,6 +84,10 @@ export async function PUT(req: Request, { params }: RouteContext) {
       );
     }
 
+    if (Object.keys(parsedBody.data).length === 0) {
+      return NextResponse.json({ error: "No fields to update" }, { status: 400 });
+    }
+
     const [updated] = await db
       .update(events)
       .set(parsedBody.data)
@@ -97,6 +102,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
     }
 
     return NextResponse.json(updated, { status: 200 });
+
   } catch (err) {
     console.error("PUT /api/events/:id error:", err);
 
@@ -109,7 +115,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
 
 export async function DELETE(_req: Request, { params }: RouteContext) {
   try {
-    const parsedId = eventIdSchema.safeParse(params.id);
+    const parsedId = eventIdSchema.safeParse((await params).id);
 
     if (!parsedId.success) {
       return NextResponse.json(

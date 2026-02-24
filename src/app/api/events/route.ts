@@ -20,11 +20,10 @@ export async function GET(req: Request) {
     if (published === "true") whereClauses.push(eq(events.isPublished, true));
     if (published === "false") whereClauses.push(eq(events.isPublished, false));
 
-    // const orderBy =
-    //   sort === "startDesc"
-    //     ? desc(events.startDateTime)
-    //     : asc(events.startDateTime);
-    const orderBy = events.startDateTime;
+    const orderBy =
+      sort === "startDesc"
+        ? desc(events.startDateTime)
+        : asc(events.startDateTime);
 
     const rows = await db
       .select()

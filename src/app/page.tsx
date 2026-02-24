@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { getPublishedEvents } from "@/app/lib/data/events";
+import AuthButton from "@/app/components/AuthButton";
 
 function resolveImageKey(title: string): string {
   const map: Record<string, string> = {
+    "21 Days of Prayer and Feasting": "twenty_one_dop",
     "Freedom Conference": "freedom",
     "Marriage Conference": "marriage_conference",
     "Motion Conference": "motion",
@@ -19,14 +21,18 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-zinc-50">
-      <section className="border-b border-zinc-200 bg-white">
+      <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur">
         <div className="mx-auto max-w-5xl px-6 py-16 text-center">
           <h1 className="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl">
             Events
           </h1>
           <p className="mt-4 text-lg text-zinc-600">Highlands Event Dashboard</p>
         </div>
-      </section>
+
+        <div className="fixed right-6 top-6 z-50">
+          <AuthButton />
+        </div>
+      </header>
 
       <section className="mx-auto max-w-5xl px-6 py-12">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
