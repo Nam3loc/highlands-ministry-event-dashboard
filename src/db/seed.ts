@@ -1,8 +1,12 @@
-import { HighlandsEvent } from "./model";
+import "dotenv/config";
+import { db, sql } from "./index";
+import { events } from "./schema";
 
-export const events: HighlandsEvent[] = [
-  {
-    id: '0',
+async function main() {
+  await db.delete(events);
+
+  await db.insert(events).values([
+    {
     title: '21 Days of Prayer and Feasting',
     description: "Pray First.",
     cost: 0,
@@ -13,7 +17,6 @@ export const events: HighlandsEvent[] = [
     endDateTime: new Date('2026-01-25'),
   },
   {
-    id: '1',
     title: 'Marriage Conference',
     description: "Grow together in marriage purposefully.",
     cost: 140,
@@ -24,7 +27,6 @@ export const events: HighlandsEvent[] = [
     endDateTime: new Date('2026-02-21'),
   },
   {
-    id: '2',
     title: 'Freedom Conference',
     description: "Learning to live in freedom everyday.",
     cost: 0,
@@ -35,7 +37,6 @@ export const events: HighlandsEvent[] = [
     endDateTime: new Date('2026-04-18'),
   },
   {
-    id: '3',
     title: 'Summer Blast',
     description: "Highlands Kids' opportunity to grow in faith and friendship.",
     cost: 0,
@@ -46,7 +47,6 @@ export const events: HighlandsEvent[] = [
     endDateTime: new Date('2026-06-24'),
   },
   {
-    id: '4',
     title: 'Serve Day',
     description: "Highlands' opportunity to serve their city.",
     cost: 0,
@@ -57,7 +57,6 @@ export const events: HighlandsEvent[] = [
     endDateTime: new Date('2026-07-11'),
   },
   {
-    id: '5',
     title: 'Motion Conference',
     description: "Highlands Students' opportunity to get refreshed, equipped, and inspired to live their lives in MOTION.",
     cost: 135,
@@ -68,7 +67,6 @@ export const events: HighlandsEvent[] = [
     endDateTime: new Date('2026-07-25'),
   },
   {
-    id: '6',
     title: '21 Days of Prayer and Fasting',
     description: "Pray First.",
     cost: 0,
@@ -78,4 +76,13 @@ export const events: HighlandsEvent[] = [
     startDateTime: new Date('2026-08-02'),
     endDateTime: new Date('2026-08-22'),
   },
-];
+  ]);
+
+  console.log("Seeded events ✅");
+  process.exit(0);
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
