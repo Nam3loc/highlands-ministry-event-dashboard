@@ -18,9 +18,7 @@ export default function EventRow({ event }: { event: HighlandsEvent }) {
     try {
       setIsDeleting(true);
 
-      const res = await fetch(`/api/events/${event.id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(`/api/events/${event.id}`, { method: "DELETE" });
 
       if (!res.ok) {
         const data = await res.json().catch(() => null);

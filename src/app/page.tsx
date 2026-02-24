@@ -1,6 +1,10 @@
 import Image from "next/image";
-import { getPublishedEvents } from "@/app/lib/data/events";
 import AuthButton from "@/app/components/AuthButton";
+import Pagination from "@/app/components/Pagination";
+import { getPublishedEventsPaged } from "@/app/lib/data/events";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const IMAGE_MAP: Record<string, string> = {
   "21 Days of Prayer and Feasting": "twenty_one_dop.webp",
@@ -18,17 +22,26 @@ function resolveImageFile(title: string): string {
   return IMAGE_MAP[title] ?? DEFAULT_IMAGE_FILE;
 }
 
-export default async function Home() {
-  const events = await getPublishedEvents();
+type Props = { searchParams: Promise<{ page?: string; pageSize?: string }> };
+
+export default async function Home({ searchParams }: Props) {
+  const sp = await searchParams;
+  const page = Number(sp.page ?? "1");
+  const pageSize = Number(sp.pageSize ?? "6");
+
+  const result = await getPublishedEventsPaged({ page, pageSize });
+  const events = result.data;
 
   return (
     <main className="min-h-screen bg-zinc-50">
       <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur">
-        <div className="mx-auto max-w-5xl px-6 py-16 text-center">
-          <h1 className="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl">
+        <div className="mx-auto max-w-5xl px-6 py-8 text-center">
+          <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
             Events
           </h1>
-          <p className="mt-4 text-lg text-zinc-600">Highlands Event Dashboard</p>
+          <p className="mt-2 text-base text-zinc-600">
+            Highlands Event Dashboard
+          </p>
         </div>
 
         <div className="fixed right-6 top-6 z-50">
@@ -82,6 +95,13 @@ export default async function Home() {
             );
           })}
         </div>
+
+        <Pagination
+          basePath="/"
+          page={result.page}
+          totalPages={result.totalPages}
+          pageSize={result.pageSize}
+        />
       </section>
     </main>
   );

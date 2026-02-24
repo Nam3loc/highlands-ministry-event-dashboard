@@ -1,51 +1,65 @@
 import Link from "next/link";
-import { HighlandsEvent } from "../lib/model";
-import EventRow from "./components/EventRow";
+import Pagination from "@/app/components/Pagination";
+import EventRow from "@/app/admin/components/EventRow";
+import { getAllEventsPaged } from "@/app/lib/data/events";
 
-async function getAllEvents() {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/events`, {
-    cache: "no-store",
-  });
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-  if (!res.ok) throw new Error("Failed to load events");
-  return res.json();
-}
+type Props = {
+  searchParams: Promise<{ page?: string; pageSize?: string }>;
+};
 
-export default async function AdminPage() {
-  const events = await getAllEvents();
+export default async function AdminPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const page = Number(sp.page ?? "1");
+  const pageSize = Number(sp.pageSize ?? "6");
+
+  const result = await getAllEventsPaged({ page, pageSize });
 
   return (
     <main className="min-h-screen bg-zinc-50">
       <section className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto max-w-5xl px-6 py-10 flex items-center justify-between">
-					<Link
-						href="/"
-						className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm hover:bg-zinc-50"
-					>
-						← Back to Public
-					</Link>
+				<div className="mx-auto max-w-5xl px-6 py-10 grid grid-cols-3 items-center">
+					<div className="justify-self-start">
+						<Link
+							href="/"
+							className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm hover:bg-zinc-50"
+						>
+							← Back to Public
+						</Link>
+					</div>
 
-          <div>
-            <h1 className="text-3xl font-semibold text-zinc-900">Admin</h1>
-            <p className="mt-1 text-sm text-zinc-600">
-              Manage annual events.
-            </p>
-          </div>
+					<div className="text-center">
+						<h1 className="text-3xl font-semibold text-zinc-900">Admin</h1>
+						<p className="mt-1 text-sm text-zinc-600">Manage annual events.</p>
+					</div>
 
-          <Link
-            href="/admin/new"
-            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
-          >
-            Create Event
-          </Link>
-        </div>
-      </section>
+					<div className="justify-self-end">
+						<Link
+							href="/admin/new"
+							className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+						>
+							Create Event
+						</Link>
+					</div>
+				</div>
+			</section>
+
+			<p className="text-xs text-zinc-400">debug page={page}</p>
 
       <section className="mx-auto max-w-5xl px-6 py-10 space-y-4">
-				{events.map((event: HighlandsEvent) => (
-					<EventRow key={event.id} event={event} />
-				))}
-			</section>
-		</main>
+        {result.data.map((event) => (
+          <EventRow key={event.id} event={event} />
+        ))}
+
+        <Pagination
+          basePath="/admin"
+          page={result.page}
+          totalPages={result.totalPages}
+          pageSize={result.pageSize}
+        />
+      </section>
+    </main>
   );
 }
