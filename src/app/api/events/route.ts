@@ -10,7 +10,7 @@ export async function GET(req: Request) {
 
     const campus = url.searchParams.get("campus");
     const category = url.searchParams.get("category");
-    const published = url.searchParams.get("published"); // returns string: "true" | "false" | null
+    const published = url.searchParams.get("published");
     const sort = url.searchParams.get("sort");
 
     const whereClauses = [];

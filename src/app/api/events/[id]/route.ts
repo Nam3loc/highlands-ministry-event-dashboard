@@ -51,8 +51,6 @@ export async function PUT(req: Request, { params }: RouteContext) {
   try {
     const { id } = await params;
 
-    console.log("PUT id:", id);
-
     const parsedId = eventIdSchema.safeParse(id);
     if (!parsedId.success) {
       return NextResponse.json(
@@ -113,42 +111,14 @@ export async function PUT(req: Request, { params }: RouteContext) {
   }
 }
 
-export async function DELETE(_req: Request, { params }: RouteContext) {
-  try {
-    const parsedId = eventIdSchema.safeParse((await params).id);
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
-    if (!parsedId.success) {
-      return NextResponse.json(
-        { error: "Invalid event id" },
-        { status: 400 }
-      );
-    }
+  const [deleted] = await db
+    .delete(events)
+    .where(eq(events.id, id))
+    .returning();
 
-    const [deleted] = await db
-      .delete(events)
-      .where(eq(events.id, parsedId.data))
-      .returning();
-
-    if (!deleted) {
-      return NextResponse.json(
-        { error: "Event not found" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(
-      {
-        message: "Event deleted",
-        id: deleted.id,
-      },
-      { status: 200 }
-    );
-  } catch (err) {
-    console.error("DELETE /api/events/:id error:", err);
-
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
+  if (!deleted) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json({ ok: true }, { status: 200 });
 }

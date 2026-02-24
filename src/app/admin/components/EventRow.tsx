@@ -2,11 +2,37 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import PublishToggle from "./PublishToggle";
 import { HighlandsEvent } from "@/app/lib/model";
 
 export default function EventRow({ event }: { event: HighlandsEvent }) {
   const [published, setPublished] = useState<boolean>(event.isPublished);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+
+  async function onDelete() {
+    const ok = confirm(`Delete "${event.title}"? This cannot be undone.`);
+    if (!ok) return;
+
+    try {
+      setIsDeleting(true);
+
+      const res = await fetch(`/api/events/${event.id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        alert(data?.error ?? "Failed to delete event");
+        return;
+      }
+
+      router.refresh();
+    } finally {
+      setIsDeleting(false);
+    }
+  }
 
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm flex items-center justify-between gap-4">
@@ -42,12 +68,14 @@ export default function EventRow({ event }: { event: HighlandsEvent }) {
           Edit
         </Link>
 
-        <Link
-          href={`/admin/${event.id}/delete`}
-          className="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-700 hover:bg-red-50"
+        <button
+          type="button"
+          onClick={onDelete}
+          disabled={isDeleting}
+          className="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-700 hover:bg-red-50 disabled:opacity-50"
         >
-          Delete
-        </Link>
+          {isDeleting ? "Deleting..." : "Delete"}
+        </button>
       </div>
     </div>
   );

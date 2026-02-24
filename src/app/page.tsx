@@ -2,18 +2,20 @@ import Image from "next/image";
 import { getPublishedEvents } from "@/app/lib/data/events";
 import AuthButton from "@/app/components/AuthButton";
 
-function resolveImageKey(title: string): string {
-  const map: Record<string, string> = {
-    "21 Days of Prayer and Feasting": "twenty_one_dop",
-    "Freedom Conference": "freedom",
-    "Marriage Conference": "marriage_conference",
-    "Motion Conference": "motion",
-    "Serve Day": "serve_day",
-    "Summer Blast": "summer_blast",
-    "21 Days of Prayer and Fasting": "twenty_one_dop",
-  };
+const IMAGE_MAP: Record<string, string> = {
+  "21 Days of Prayer and Feasting": "twenty_one_dop.webp",
+  "Freedom Conference": "freedom.webp",
+  "Marriage Conference": "marriage_conference.webp",
+  "Motion Conference": "motion.webp",
+  "Serve Day": "serve_day.webp",
+  "Summer Blast": "summer_blast.webp",
+  "21 Days of Prayer and Fasting": "twenty_one_dop.webp",
+};
 
-  return map[title] ?? "default";
+const DEFAULT_IMAGE_FILE = "highlands_logo.jpg";
+
+function resolveImageFile(title: string): string {
+  return IMAGE_MAP[title] ?? DEFAULT_IMAGE_FILE;
 }
 
 export default async function Home() {
@@ -37,7 +39,7 @@ export default async function Home() {
       <section className="mx-auto max-w-5xl px-6 py-12">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => {
-            const imageKey = resolveImageKey(event.title);
+            const imageFile = resolveImageFile(event.title);
             const imagePosition =
               event.title === "Freedom Conference" ||
               event.title === "Motion Conference"
@@ -51,7 +53,7 @@ export default async function Home() {
               >
                 <div className="relative mb-4 h-40 w-full overflow-hidden rounded-lg bg-zinc-100">
                   <Image
-                    src={`/assets/${imageKey}.webp`}
+                    src={`/assets/${imageFile}`}
                     alt={event.title}
                     fill
                     className={`object-cover ${imagePosition}`}
