@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { db, sql } from "./index";
+import { db } from "./index";
 import { events } from "./schema";
 
 async function main() {
