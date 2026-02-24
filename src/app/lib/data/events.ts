@@ -1,3 +1,4 @@
+import "server-only";
 import { db } from "@/db";
 import { events } from "@/db/schema";
 import { asc, eq } from "drizzle-orm";
