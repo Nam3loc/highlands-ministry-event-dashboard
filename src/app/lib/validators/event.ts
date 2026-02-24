@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const eventIdSchema = z.string().uuid("Invalid event id");
+
 export const createEventSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().min(1).max(2000),
@@ -19,4 +21,12 @@ export const createEventSchema = z.object({
   }
 });
 
+export const updateEventSchema = createEventSchema;
+
+// Optional: for admin “toggle published” PATCH later
+export const patchPublishedSchema = z.object({
+  isPublished: z.boolean(),
+});
+
 export type CreateEventInput = z.infer<typeof createEventSchema>;
+export type UpdateEventInput = z.infer<typeof updateEventSchema>;
