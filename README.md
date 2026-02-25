@@ -89,36 +89,51 @@ npm test
 
 ---
 
-## Tech Stack
-### Frontend
+# Tech Stack
+
+## Frontend
 - Next.js (App Router)
 - React
 - TailwindCSS
 
-### Backend
-- Next.js (API Routes)
+## Backend
+- Next.js API Routes
 - PostgreSQL
 - Drizzle ORM
 
-### Authentication
-- Next Auth
+## Authentication
+- NextAuth
 
-### Validation
+## Validation
 - Zod
 
-### Testing
+## Testing
 - Jest
 
-Local Development Setup
-1. Clone Repository
+---
+
+# Local Development Setup
+
+## 1. Clone Repository
+
+```bash
 git clone https://github.com/yourusername/ministry-events-dashboard.git
 cd ministry-events-dashboard
-2. Install Dependencies
+## 2. Install Dependencies
+
+Run the following command to install all required packages:
+
+```bash
 npm install
-3. Configure Environment Variables
+```
 
-Create a .env.local file in the project root:
+---
 
+## 3. Configure Environment Variables
+
+Create a `.env.local` file in the project root directory and add the following:
+
+```env
 DATABASE_URL=postgresql://postgres:password@localhost:5432/ministry_events
 
 ADMIN_USERNAME=admin
@@ -126,67 +141,124 @@ ADMIN_PASSWORD=password123
 
 NEXTAUTH_SECRET=super-secret-key
 NEXTAUTH_URL=http://localhost:3000
-4. Setup PostgreSQL Database
+```
 
-Make sure PostgreSQL is running.
+---
 
-Create database:
+## 4. Setup PostgreSQL Database
 
+Make sure PostgreSQL is installed and running on your machine.
+
+### Create the Database
+
+Run the following SQL command:
+
+```sql
 CREATE DATABASE ministry_events;
+```
 
-Run migrations:
+---
 
+### Run Database Migrations
+
+Generate and apply migrations using Drizzle:
+
+```bash
 npm run db:generate
 npm run db:migrate
+```
 
-(Optional) Seed database:
+---
 
+### Optional: Seed the Database
+
+Populate the database with sample data:
+
+```bash
 npm run db:seed
-5. Run Development Server
+```
+## 5. Run Development Server
+
+Start the development server with:
+
+```bash
 npm run dev
+```
 
-Open in browser:
+---
 
+## Open in Browser
+
+Public dashboard:
+
+```
 http://localhost:3000
+```
 
 Admin dashboard:
 
+```
 http://localhost:3000/admin
-Admin Login
+```
 
-Use credentials from your .env.local:
+---
 
+## Admin Login
+
+Use the credentials defined in your `.env.local` file:
+
+```
 Username: admin
 Password: password123
-Running Tests
+```
+
+---
+
+## Running Tests
+
+Run the Jest test suite:
+
+```bash
 npm test
-Project Structure
+```
+
+---
+
+## Project Structure
+
+```
 src/
-│
+
 ├── app/
 │   ├── admin/                # Admin dashboard pages
 │   ├── api/                  # REST API routes
 │   ├── components/           # Shared components
 │   └── page.tsx              # Public dashboard
-│
+
 ├── db/
 │   ├── schema.ts             # Drizzle schema
 │   └── index.ts              # Database connection
-│
+
 ├── lib/
 │   ├── data/                 # Data access layer
 │   ├── validators/           # Zod validation schemas
 │   └── auth/                 # Authentication logic
-│
+
 └── __tests__/                # Jest test suite
-API Example
+```
+## API Example
 
-Create Event:
+### Create Event
 
+**Endpoint**
+
+```http
 POST /api/events
+```
 
-Body:
+**Request Body**
 
+```json
 {
   "title": "Sunday Worship",
   "description": "Weekly service",
@@ -197,33 +269,51 @@ Body:
   "cost": 0,
   "isPublished": true
 }
-Postman Collection
+```
+
+---
+
+## Postman Collection
 
 (Add later)
 
-Import collection:
+Import the collection from:
 
+```
 postman/MinistryEvents.postman_collection.json
+```
 
-Or link:
+Or via link:
 
+```
 https://your-postman-link-here
-Database Schema
+```
 
-Table: events
+---
 
-id (uuid, primary key)
-title
-description
-campus
-category
-startDateTime
-endDateTime
-cost
-isPublished
-createdAt
-updatedAt
-Architecture Overview
+## Database Schema
+
+### Table: `events`
+
+| Column | Description |
+|--------|-------------|
+| id | UUID, primary key |
+| title | Event title |
+| description | Event description |
+| campus | Campus name |
+| category | Event category |
+| startDateTime | Event start date/time |
+| endDateTime | Event end date/time |
+| cost | Event cost |
+| isPublished | Publish status |
+| createdAt | Record creation timestamp |
+| updatedAt | Record last update timestamp |
+
+---
+
+## Architecture Overview
+
+```
 Client (Next.js Frontend)
         │
         ▼
@@ -234,42 +324,58 @@ Data Layer (Drizzle ORM)
         │
         ▼
 PostgreSQL Database
-Production Build
+```
+
+---
+
+## Production Build
+
+Build the application:
+
+```bash
 npm run build
+```
+
+Start the production server:
+
+```bash
 npm run start
-Deployment
+```
 
-Recommended platform: Vercel
+---
 
-Ensure environment variables are configured in your deployment platform.
+## Deployment
 
-Future Improvements
+Recommended platform: **Vercel**
 
-Token-based authentication
+Steps:
 
-Weather API integration
+1. Push project to GitHub
+2. Connect repository to Vercel
+3. Configure environment variables in the Vercel dashboard
+4. Deploy
 
-Automated Postman test runs
+Ensure all required environment variables are configured in your deployment platform.
 
-Role-based permissions
+---
 
-Event image uploads
+## Future Improvements
 
-Audit logging
+- Token-based authentication
+- Weather API integration
+- Automated Postman test runs
+- Role-based permissions
+- Event image uploads
+- Audit logging
 
-Author
+---
+
+## Author
 
 Coleman Escue
 
 GitHub:
+
+```
 https://github.com/yourusername
-
-
----
-
-If you'd like, I can also generate:
-
-- a Postman collection file
-- a seed script with realistic church events
-- and an ER diagram image for your README
-::contentReference[oaicite:0]{index=0}
+```
