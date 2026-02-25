@@ -1,65 +1,108 @@
 import Image from "next/image";
+import AuthButton from "@/app/components/AuthButton";
+import Pagination from "@/app/components/Pagination";
+import { getPublishedEventsPaged } from "@/app/lib/data/events";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+const IMAGE_MAP: Record<string, string> = {
+  "21 Days of Prayer and Feasting": "twenty_one_dop.webp",
+  "Freedom Conference": "freedom.webp",
+  "Marriage Conference": "marriage_conference.webp",
+  "Motion Conference": "motion.webp",
+  "Serve Day": "serve_day.webp",
+  "Summer Blast": "summer_blast.webp",
+  "21 Days of Prayer and Fasting": "twenty_one_dop.webp",
+};
+
+const DEFAULT_IMAGE_FILE = "highlands_logo.jpg";
+
+function resolveImageFile(title: string): string {
+  return IMAGE_MAP[title] ?? DEFAULT_IMAGE_FILE;
+}
+
+type Props = { searchParams: Promise<{ page?: string; pageSize?: string }> };
+
+export default async function Home({ searchParams }: Props) {
+  const sp = await searchParams;
+  const page = Number(sp.page ?? "1");
+  const pageSize = Number(sp.pageSize ?? "6");
+
+  const result = await getPublishedEventsPaged({ page, pageSize });
+  const events = result.data;
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className="min-h-screen bg-zinc-50">
+      <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur">
+        <div className="mx-auto max-w-5xl px-6 py-8 text-center">
+          <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
+            Events
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-2 text-base text-zinc-600">
+            Highlands Event Dashboard
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="fixed right-6 top-6 z-50">
+          <AuthButton />
         </div>
-      </main>
-    </div>
+      </header>
+
+      <section className="mx-auto max-w-5xl px-6 py-12">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {events.map((event) => {
+            const imageFile = resolveImageFile(event.title);
+            const imagePosition =
+              event.title === "Freedom Conference" ||
+              event.title === "Motion Conference"
+                ? "object-[center_25%]"
+                : "object-center";
+
+            return (
+              <div
+                key={event.id}
+                className="group rounded-xl border border-zinc-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              >
+                <div className="relative mb-4 h-40 w-full overflow-hidden rounded-lg bg-zinc-100">
+                  <Image
+                    src={`/assets/${imageFile}`}
+                    alt={event.title}
+                    fill
+                    className={`object-cover ${imagePosition}`}
+                    priority
+                  />
+                </div>
+
+                <h3 className="text-xl font-semibold text-zinc-900">
+                  {event.title}
+                </h3>
+
+                <p className="mt-2 text-sm text-zinc-500">
+                  {new Date(event.startDateTime).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </p>
+
+                {event.description && (
+                  <p className="mt-3 text-sm text-zinc-600 line-clamp-3">
+                    {event.description}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <Pagination
+          basePath="/"
+          page={result.page}
+          totalPages={result.totalPages}
+          pageSize={result.pageSize}
+        />
+      </section>
+    </main>
   );
 }
