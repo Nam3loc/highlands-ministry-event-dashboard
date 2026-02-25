@@ -339,12 +339,11 @@ Steps:
 
 ## Future Improvements
 
-- Token-based authentication
 - Weather API integration
 - Automated Postman test runs
 - Role-based permissions
 - Event image uploads
-- Audit logging
+- Filtering by campus and category
 
 ---
 
