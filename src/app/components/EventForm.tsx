@@ -40,7 +40,7 @@ export default function EventForm({ mode, initialValues, onSubmit, submitLabel }
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
-  } = useForm<EventFormInput, any, EventFormValues>({
+  } = useForm<EventFormInput, undefined, EventFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
