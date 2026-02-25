@@ -15,9 +15,6 @@ This video demonstrates:
 - Public events dashboard
 - Admin dashboard functionality
 - Creating, editing, publishing, and deleting events
-- API endpoint functionality
-- Database schema overview
-- Code walkthrough
 
 ## Features
 
