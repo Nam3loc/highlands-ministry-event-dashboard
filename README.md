@@ -54,9 +54,9 @@ Fully RESTful API with validation and error handling.
 |------|---------|-------------|
 | GET | `/api/events` | Get all events |
 | GET | `/api/events/:id` | Get event by ID |
-| POST | `/api/admin/new` | Create event |
-| PUT | `/api/admin/:id` | Update event |
-| DELETE | `/api/admin/:id/delete` | Delete event |
+| POST | `/api/events` | Create event |
+| PUT | `/api/events/:id` | Update event |
+| DELETE | `/api/events/:id` | Delete event |
 
 Supports filtering for Pagination:
 
