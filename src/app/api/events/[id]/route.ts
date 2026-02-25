@@ -111,12 +111,18 @@ export async function PUT(req: Request, { params }: RouteContext) {
   }
 }
 
-export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function DELETE(_req: Request, { params }: RouteContext) {
+  const parsedId = eventIdSchema.safeParse((await params).id);
+  if (!parsedId.success) {
+    return NextResponse.json(
+      { error: "Invalid event id", issues: parsedId.error.issues },
+      { status: 400 }
+    );
+  }
 
   const [deleted] = await db
     .delete(events)
-    .where(eq(events.id, id))
+    .where(eq(events.id, parsedId.data))
     .returning();
 
   if (!deleted) return NextResponse.json({ error: "Not found" }, { status: 404 });

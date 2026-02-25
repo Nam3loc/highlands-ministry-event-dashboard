@@ -1,5 +1,7 @@
+// src/app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { authorizeAdmin } from "@/app/api/auth/authorize";
 
 const handler = NextAuth({
   providers: [
@@ -10,24 +12,15 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const username = credentials?.username;
-        const password = credentials?.password;
-
-        if (
-          username === process.env.ADMIN_USERNAME &&
-          password === process.env.ADMIN_PASSWORD
-        ) {
-          return { id: "admin", name: "Admin", role: "admin" };
-        }
-
-        return null;
+        return authorizeAdmin({
+          username: credentials?.username,
+          password: credentials?.password,
+        });
       },
     }),
   ],
   session: { strategy: "jwt" },
-  pages: {
-    signIn: "/login",
-  },
+  pages: { signIn: "/login" },
 });
 
 export { handler as GET, handler as POST };

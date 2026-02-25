@@ -71,5 +71,12 @@ export async function POST(req: Request) {
     .values(parsed.data)
     .returning();
 
+    if (!created) {
+      return NextResponse.json(
+        { error: "Failed to create event" },
+        { status: 500 }
+      );
+    }
+
   return NextResponse.json(created, { status: 201 });
 }
