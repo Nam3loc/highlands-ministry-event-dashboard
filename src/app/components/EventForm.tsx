@@ -100,7 +100,7 @@ export default function EventForm({ mode, initialValues, onSubmit, submitLabel }
           <div>
             <label className={labelBase}>DESCRIPTION</label>
             <textarea
-              className={inputBase + " min-h-[120px] resize-y"}
+              className={inputBase + " min-h-30 resize-y"}
               placeholder="Share the details people need…"
               {...register("description")}
             />
