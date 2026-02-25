@@ -8,7 +8,7 @@ This project was developed as part of a take-home assessment to demonstrate full
 
 ## Demo Video
 
-*(Add Loom or YouTube link here)*
+[Highlands Event Dashboard Demo Video](https://www.loom.com/share/9684d2821cb549dda53c092d824c1586)
 
 This video demonstrates:
 
@@ -18,8 +18,6 @@ This video demonstrates:
 - API endpoint functionality
 - Database schema overview
 - Code walkthrough
-
----
 
 ## Features
 
@@ -60,10 +58,10 @@ Fully RESTful API with validation and error handling.
 | PUT | `/api/admin/:id` | Update event |
 | DELETE | `/api/admin/:id/delete` | Delete event |
 
-Supports filtering:
+Supports filtering for Pagination:
 
 ```
-/api/events?campus=Main&category=Worship&published=true
+/admin?page=2&pageSize=6
 ```
 
 ---
@@ -114,7 +112,7 @@ npm test
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/ministry-events-dashboard.git
+git clone https://github.com/Nam3loc/ministry-events-dashboard.git
 cd ministry-events-dashboard
 ```
 
@@ -130,16 +128,32 @@ npm install
 
 ### 3. Configure Environment Variables
 
-Create a `.env.local` file in the project root directory:
+Create a `.env` file in the project root directory:
 
 ```env
 DATABASE_URL=postgresql://postgres:password@localhost:5432/ministry_events
 
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=password123
+ADMIN_USERNAME=your_admin_username
+ADMIN_PASSWORD=your_admin_password
 
-NEXTAUTH_SECRET=super-secret-key
+NEXTAUTH_SECRET=generate_a_secure_random_string
 NEXTAUTH_URL=http://localhost:3000
+```
+
+---
+
+### Generate NEXTAUTH_SECRET
+
+Run the following command to generate a secure secret:
+
+```bash
+openssl rand -base64 32
+```
+
+Or use Node.js:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ```
 
 ---
@@ -193,7 +207,7 @@ Admin dashboard:
 
 ### Admin Login
 
-Use credentials from `.env.local`:
+Use credentials from `.env`:
 
 ```
 Username: admin
@@ -249,31 +263,15 @@ POST /api/events
 
 ```json
 {
-  "title": "Sunday Worship",
-  "description": "Weekly service",
-  "campus": "Main Campus",
-  "category": "Worship",
+  "title": "ARC Conference",
+  "description": "Conference for church planters to be resourced and find community.",
+  "campus": "Grandview",
+  "category": "ARC",
   "startDateTime": "2030-01-01T18:00:00Z",
   "endDateTime": "2030-01-01T19:00:00Z",
-  "cost": 0,
+  "cost": 100,
   "isPublished": true
 }
-```
-
----
-
-## Postman Collection
-
-Import:
-
-```
-postman/MinistryEvents.postman_collection.json
-```
-
-Or via link:
-
-```
-https://your-postman-link-here
 ```
 
 ---
@@ -339,11 +337,11 @@ Steps:
 
 ## Future Improvements
 
-- Weather API integration
+- Weather API integration to show what the weather will be on the day of the event
+- Filtering by Campus and Category
 - Automated Postman test runs
-- Role-based permissions
+- More Role-based permissions
 - Event image uploads
-- Filtering by campus and category
 
 ---
 
