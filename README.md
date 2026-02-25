@@ -29,8 +29,8 @@ This video demonstrates:
 - Pagination support
 - Clean, responsive mobile-friendly UI
 
-Accessible at:
-http://localhost:3000
+Accessible at:  
+[http://localhost:3000](http://localhost:3000)
 
 ---
 
@@ -43,8 +43,8 @@ http://localhost:3000
 - Delete events
 - Mobile-friendly responsive layout
 
-Accessible at:
-http://localhost:3000/admin
+Accessible at:  
+[http://localhost:3000/admin](http://localhost:3000/admin)
 
 ---
 
@@ -61,7 +61,10 @@ Fully RESTful API with validation and error handling.
 | DELETE | `/api/admin/:id/delete` | Delete event |
 
 Supports filtering:
+
+```
 /api/events?campus=Main&category=Worship&published=true
+```
 
 ---
 
@@ -73,55 +76,51 @@ Admin credentials are defined in environment variables.
 
 ---
 
-### Testing
+## Running Tests
 
-Includes Jest test suite covering:
-
-- API success cases
-- Validation failures
-- Edge cases
-- Database error handling
-
-Run tests:
+Run the Jest test suite:
 
 ```bash
 npm test
+```
 
 ---
 
-# Tech Stack
+## Tech Stack
 
-## Frontend
+### Frontend
 - Next.js (App Router)
 - React
 - TailwindCSS
 
-## Backend
+### Backend
 - Next.js API Routes
 - PostgreSQL
 - Drizzle ORM
 
-## Authentication
+### Authentication
 - NextAuth
 
-## Validation
+### Validation
 - Zod
 
-## Testing
+### Testing
 - Jest
 
 ---
 
-# Local Development Setup
+## Local Development Setup
 
-## 1. Clone Repository
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/yourusername/ministry-events-dashboard.git
 cd ministry-events-dashboard
-## 2. Install Dependencies
+```
 
-Run the following command to install all required packages:
+---
+
+### 2. Install Dependencies
 
 ```bash
 npm install
@@ -129,9 +128,9 @@ npm install
 
 ---
 
-## 3. Configure Environment Variables
+### 3. Configure Environment Variables
 
-Create a `.env.local` file in the project root directory and add the following:
+Create a `.env.local` file in the project root directory:
 
 ```env
 DATABASE_URL=postgresql://postgres:password@localhost:5432/ministry_events
@@ -145,13 +144,11 @@ NEXTAUTH_URL=http://localhost:3000
 
 ---
 
-## 4. Setup PostgreSQL Database
+### 4. Setup PostgreSQL Database
 
-Make sure PostgreSQL is installed and running on your machine.
+Make sure PostgreSQL is installed and running.
 
-### Create the Database
-
-Run the following SQL command:
+#### Create Database
 
 ```sql
 CREATE DATABASE ministry_events;
@@ -159,9 +156,7 @@ CREATE DATABASE ministry_events;
 
 ---
 
-### Run Database Migrations
-
-Generate and apply migrations using Drizzle:
+#### Run Migrations
 
 ```bash
 npm run db:generate
@@ -170,16 +165,15 @@ npm run db:migrate
 
 ---
 
-### Optional: Seed the Database
-
-Populate the database with sample data:
+#### Optional: Seed Database
 
 ```bash
 npm run db:seed
 ```
-## 5. Run Development Server
 
-Start the development server with:
+---
+
+### 5. Run Development Server
 
 ```bash
 npm run dev
@@ -187,25 +181,19 @@ npm run dev
 
 ---
 
-## Open in Browser
+### Open in Browser
 
-Public dashboard:
+Public dashboard:  
+[http://localhost:3000](http://localhost:3000)
 
-```
-http://localhost:3000
-```
-
-Admin dashboard:
-
-```
-http://localhost:3000/admin
-```
+Admin dashboard:  
+[http://localhost:3000/admin](http://localhost:3000/admin)
 
 ---
 
-## Admin Login
+### Admin Login
 
-Use the credentials defined in your `.env.local` file:
+Use credentials from `.env.local`:
 
 ```
 Username: admin
@@ -214,9 +202,7 @@ Password: password123
 
 ---
 
-## Running Tests
-
-Run the Jest test suite:
+### Run Tests
 
 ```bash
 npm test
@@ -246,6 +232,9 @@ src/
 
 └── __tests__/                # Jest test suite
 ```
+
+---
+
 ## API Example
 
 ### Create Event
@@ -275,9 +264,7 @@ POST /api/events
 
 ## Postman Collection
 
-(Add later)
-
-Import the collection from:
+Import:
 
 ```
 postman/MinistryEvents.postman_collection.json
@@ -293,7 +280,7 @@ https://your-postman-link-here
 
 ## Database Schema
 
-### Table: `events`
+### Table: events
 
 | Column | Description |
 |--------|-------------|
@@ -330,15 +317,8 @@ PostgreSQL Database
 
 ## Production Build
 
-Build the application:
-
 ```bash
 npm run build
-```
-
-Start the production server:
-
-```bash
 npm run start
 ```
 
@@ -350,12 +330,10 @@ Recommended platform: **Vercel**
 
 Steps:
 
-1. Push project to GitHub
-2. Connect repository to Vercel
-3. Configure environment variables in the Vercel dashboard
-4. Deploy
-
-Ensure all required environment variables are configured in your deployment platform.
+1. Push project to GitHub  
+2. Connect repository to Vercel  
+3. Configure environment variables  
+4. Deploy  
 
 ---
 
@@ -374,8 +352,5 @@ Ensure all required environment variables are configured in your deployment plat
 
 Coleman Escue
 
-GitHub:
-
-```
+GitHub:  
 https://github.com/yourusername
-```
